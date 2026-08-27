@@ -69,6 +69,9 @@ MISC 題目通常是「線索 → 工具/腳本 → 還原數據 → 找到 flag
   - 追蹤 TCP 串流（Follow TCP Stream）還原對話內容
   - 分析 ICMP / DNS 隧道中夾帶的隱藏資料
   - USB 封包分析（還原鍵盤/滑鼠輸入內容）
+- 通用指令
+  - 遇事不決，先上指令`strings capture.pcapng | grep -i flag`，有機會直接調出flag
+
 
 ---
 
