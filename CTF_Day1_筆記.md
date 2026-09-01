@@ -60,6 +60,8 @@
   ```
   - `strings`：從二進位檔案中提取可印刷 ASCII 字串。
   - `grep -E 'flag|ctf'`：篩選出含關鍵字的行。
+  
+  grep -rnI "picoCTF"
 - **Flag**：`ctfshow{d5e937aefb091d38e70d927b80e1e2ea}`
 
 ### misc7：藏在 JPEG 縮圖（Thumbnail）裡
